@@ -1,0 +1,4 @@
+node_modules/
+.vercel/
+assets/orig/
+assets/stand-pdf/
