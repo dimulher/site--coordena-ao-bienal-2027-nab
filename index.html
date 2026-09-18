@@ -24,7 +24,6 @@
 <script>
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
 fbq('init','1893288164591890');
-fbq('track','PageView');
 </script>
 <!-- ====================================================== -->
 
@@ -763,6 +762,34 @@ document.body.classList.add('anim');
 /* ===== UTM capture ===== */
 const _utm = Object.fromEntries(['utm_source','utm_medium','utm_campaign','utm_content','utm_term'].map(k => [k, new URLSearchParams(location.search).get(k) || null]));
 
+/* ===== Conversions API (server-side) — mesmo event_id do pixel do navegador,
+   o Meta deduplica os dois automaticamente. Token fica só no Vercel (env var),
+   nunca aqui no HTML. */
+function pegarCookie(nome){
+  const m = document.cookie.match('(^|;)\\s*' + nome + '\\s*=\\s*([^;]+)');
+  return m ? m.pop() : '';
+}
+function sendCapi(eventName, eventId, extra){
+  try {
+    fetch('/api/capi', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(Object.assign({
+        event_name: eventName,
+        event_id: eventId,
+        event_source_url: location.href,
+        fbp: pegarCookie('_fbp'),
+        fbc: pegarCookie('_fbc')
+      }, extra || {}))
+    });
+  } catch(e) {}
+}
+(function firePageView(){
+  const eventId = 'pv_' + Date.now() + '_' + Math.random().toString(36).slice(2,9);
+  if(typeof fbq !== 'undefined'){ fbq('track','PageView', {}, {eventID: eventId}); }
+  sendCapi('PageView', eventId);
+})();
+
 /* Repassa as UTMs da URL da landing pro link do Spotform (buyBtn/headerCta).
    Sem isso, o clique perde utm_source/campaign/content/term/id e o lead
    chega no Spotform sem saber de qual anúncio/criativo veio. */
@@ -799,17 +826,16 @@ function closeModal(){
 }
 /* buyBtn e headerCta agora apontam direto pro formulário Spotform (link real no href);
    dispara o pixel de intenção mas deixa o navegador seguir o link normalmente */
-function trackIntent(){ if(typeof fbq !== 'undefined'){ fbq('track','InitiateCheckout',{content_name:'Seleção de Coordenadores NAB'}); } }
+function trackIntent(){
+  const eventId = 'ic_' + Date.now() + '_' + Math.random().toString(36).slice(2,9);
+  if(typeof fbq !== 'undefined'){ fbq('track','InitiateCheckout',{content_name:'Seleção de Coordenadores NAB'},{eventID: eventId}); }
+  sendCapi('InitiateCheckout', eventId, {content_name:'Seleção de Coordenadores NAB'});
+}
 document.getElementById('buyBtn').addEventListener('click', trackIntent);
 document.getElementById('headerCta').addEventListener('click', trackIntent);
 document.getElementById('modalClose').addEventListener('click', closeModal);
 modalOverlay.addEventListener('click', function(e){ if(e.target === modalOverlay) closeModal(); });
 document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && modalOverlay.classList.contains('open')) closeModal(); });
-
-function pegarCookie(nome){
-  const m = document.cookie.match('(^|;)\\s*' + nome + '\\s*=\\s*([^;]+)');
-  return m ? m.pop() : '';
-}
 
 reservaForm.addEventListener('submit', function(e){
   e.preventDefault();
