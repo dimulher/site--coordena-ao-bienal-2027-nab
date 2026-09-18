@@ -38,13 +38,12 @@
 
 ## 5. Copy
 Herdada do funil `site-selecao-coordenadores/index.html` (aprovado), adaptada pro layout deste site.
-Não inventar reivindicações novas sobre destino internacional/Portugal sem confirmação do Dede — usar sempre "evento internacional" como no original até ele definir o país.
+Destino internacional confirmado: Portugal e Orlando (EUA) juntos, como um único "palco internacional" (não dois eventos separados).
 
 ## 6. Pendências (rastrear aqui)
-- [ ] Confirmar com o Dede: Orlando/Portugal são dois eventos separados ou é "evento internacional" genérico?
-- [ ] Criar Sheet + Apps Script Web App dedicados a este funil e trocar `SHEET_WEBHOOK_URL` (hoje aponta pro sheet do Estande Bienal — ver comentário no index.html)
-- [ ] Trocar o CTA do Spotform (se for usar Spotform em vez do modal) ou manter o modal + webhook atual
-- [ ] Produzir VSL do expert e substituir o bloco `.vsl-frame` por vídeo real
+- [x] Confirmado com o Dede: Portugal e Orlando (EUA) juntos compõem o único "palco internacional" (não são dois eventos/palcos separados). Copy atualizada em: proof bar do hero, Capítulo 04 "Dois palcos", ticker de estatísticas e FAQ.
+- [x] CTAs (header + form-card) apontam direto para o formulário Spotform: `https://form.spotform.com.br/cmu77np3300ps01pbwlmh4nu6` (target="_blank"). Modal/webhook próprio (`SHEET_WEBHOOK_URL`, aponta pro sheet do Estande Bienal) ficou no código mas desconectado desses botões — não está mais em uso no fluxo principal.
+- [x] VSL adicionada: embed do YouTube `zyRHZEy5V4c` na seção "Assista antes de decidir"
 - [ ] Adicionar a arte "Seleção para Autores Internacionais" (Portugal + EUA, Bienal Rio 2027) que o Dede mandou, em formato horizontal, se for usar no hero
 - [ ] FAQ real: pedir pro Dede as dúvidas mais comuns que os leads mandam hoje
 - [ ] Hospedar (Vercel/Netlify) só quando aprovado — não subir sem ordem
