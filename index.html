@@ -763,6 +763,18 @@ document.body.classList.add('anim');
 /* ===== UTM capture ===== */
 const _utm = Object.fromEntries(['utm_source','utm_medium','utm_campaign','utm_content','utm_term'].map(k => [k, new URLSearchParams(location.search).get(k) || null]));
 
+/* Repassa as UTMs da URL da landing pro link do Spotform (buyBtn/headerCta).
+   Sem isso, o clique perde utm_source/campaign/content/term/id e o lead
+   chega no Spotform sem saber de qual anúncio/criativo veio. */
+(function forwardUtmsToSpotform(){
+  if (!location.search) return;
+  document.querySelectorAll('a[href*="form.spotform.com.br"]').forEach(function(a){
+    var url = new URL(a.href);
+    new URLSearchParams(location.search).forEach(function(v, k){ url.searchParams.set(k, v); });
+    a.href = url.toString();
+  });
+})();
+
 /* ===== Config: URL do Web App do Google Apps Script (planilha) ===== */
 /* PENDENTE: esta URL ainda é a planilha do funil "Estande Bienal NAB" (site original).
    Antes de publicar esta página, criar uma cópia da planilha/Apps Script só pra
