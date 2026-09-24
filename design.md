@@ -23,7 +23,7 @@
 - **Corpo:** Montserrat — 300/400/500/600/700
 
 ## 4. Estrutura da página
-1. Header fixo (logo + CTA "Participar da seleção" (não usar o texto "Quero fazer parte": o Meta dispara Lead no clique))
+1. Header fixo (logo + CTA "Quero fazer parte")
 2. Hero + proof bar (500+ autores / 700 mil pessoas na Bienal / 2 palcos Brasil+Internacional)
 3. Manifesto — Capítulo 01: "Você é bom no que faz. O mercado ainda não sabe disso."
 4. Jornada do Coordenador — Capítulo 02: 3 cards (Identidade, Imagem, Presença) + bloco de destaque (Capítulo 05 — Logística/passagem aérea)
